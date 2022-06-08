@@ -5,26 +5,26 @@ import AppLoading from 'expo-app-loading';
 import Asset from 'expo-asset';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
+import { NavigationContainer } from '@react-navigation/native';
+
+import Tabs from './navigation/Tabs';
+import Stack from './navigation/Stack';
 
 const loadFonts = (fonts) => fonts.map((font) => Font.loadAsync(font));
 const loadImages = (images) =>
   images.map((image) => {
     if (typeof image === 'string') {
-      return Image.prefetch([image]);
+      return Image.prefetch(image);
     } else {
-      return Asset.loadAsync([image]);
+      return Asset.loadAsync(image);
     }
   });
 export default function App() {
   const [ready, setReady] = useState(false);
   const onFinish = () => setReady(true);
   const startLoading = async () => {
-    const fonts = loadFonts([Ionicons.fonts]);
-    const images = loadImages([
-      require('./1.png'),
-      'https://item.kakaocdn.net/do/c5c470298d527ef65eb52883f0f186c48f324a0b9c48f77dbce3a43bd11ce785',
-    ]);
-    await Promise.all([...fonts, ...images]);
+    const fonts = loadFonts([Ionicons.font]);
+    await Promise.all([...fonts]);
   };
   if (!ready) {
     return (
@@ -35,7 +35,11 @@ export default function App() {
       />
     );
   }
-  return <Text>We are done loading!</Text>;
+  return (
+    <NavigationContainer>
+      <Stack />
+    </NavigationContainer>
+  );
 }
 
 // const [assets] = useAssets([require('./1.png)]);
