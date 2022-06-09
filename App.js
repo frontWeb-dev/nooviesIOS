@@ -9,7 +9,7 @@ import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 
 import Root from './navigation/Root';
-import { darkTheme, lightTheme } from './Styled';
+import { darkTheme, lightTheme } from './style';
 
 const loadFonts = (fonts) => fonts.map((font) => Font.loadAsync(font));
 const loadImages = (images) =>
