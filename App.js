@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import { useColorScheme } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { ThemeProvider } from 'styled-components/native';
 // expo
 import AppLoading from 'expo-app-loading';
 import Asset from 'expo-asset';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
-import { NavigationContainer } from '@react-navigation/native';
 
-import Tabs from './navigation/Tabs';
-import Stack from './navigation/Stack';
 import Root from './navigation/Root';
+import { darkTheme, lightTheme } from './Styled';
 
 const loadFonts = (fonts) => fonts.map((font) => Font.loadAsync(font));
 const loadImages = (images) =>
@@ -20,6 +20,7 @@ const loadImages = (images) =>
       return Asset.loadAsync(image);
     }
   });
+
 export default function App() {
   const [ready, setReady] = useState(false);
   const onFinish = () => setReady(true);
@@ -27,6 +28,8 @@ export default function App() {
     const fonts = loadFonts([Ionicons.font]);
     await Promise.all([...fonts]);
   };
+  const isDark = useColorScheme() === 'dark';
+
   if (!ready) {
     return (
       <AppLoading
@@ -37,9 +40,11 @@ export default function App() {
     );
   }
   return (
-    <NavigationContainer>
-      <Root />
-    </NavigationContainer>
+    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+      <NavigationContainer>
+        <Root />
+      </NavigationContainer>
+    </ThemeProvider>
   );
 }
 
