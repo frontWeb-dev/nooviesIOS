@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Dimensions, useColorScheme } from 'react-native';
+import {
+  ActivityIndicator,
+  Dimensions,
+  RefreshControl,
+  useColorScheme,
+} from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Swiper from 'react-native-swiper';
 import styled from 'styled-components/native';
@@ -67,7 +72,7 @@ const API_KEY = '12a42d16c5bda3e29282e2c1b95326af';
 
 const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
   const isDark = useColorScheme() === 'dark';
-
+  const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [nowPlaying, setNowPlaying] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
@@ -105,13 +110,22 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
     ).json();
     setTrending(results);
   };
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getData();
+    setRefreshing(false);
+  };
 
   return loading ? (
     <Loader>
       <ActivityIndicator size='large' />
     </Loader>
   ) : (
-    <Container>
+    <Container
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <Swiper
         horizontal
         loop
