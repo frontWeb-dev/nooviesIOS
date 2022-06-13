@@ -8,7 +8,6 @@ import { makeImgPath } from '../API/utills';
 const Image = styled.Image`
   width: 100px;
   height: 160px;
-  border-radius: 5px;
 `;
 
 interface posterProps {

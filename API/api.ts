@@ -1,18 +1,25 @@
 // interface
-export interface MovieProps {
-  posterPath?: string;
-  originalTitle: string;
-  overview?: string;
-  voteAverage?: number;
-  releaseData?: string;
+export interface HMediaProps {
+  id?: number;
+  poster_path: string;
+  original_title: string;
+  overview: string;
+  vote_average?: number;
+  release_data?: string;
+}
+
+export interface VMediaProps {
+  id?: number;
+  poster_path: string;
+  original_title: string;
+  vote_average: number;
 }
 
 export interface MoviesProps {
   id?: number;
-  backdrop_path?: string;
-  poster_path?: string;
+  backdrop_path: string;
+  poster_path: string;
   original_title: string;
-  overview?: string;
-  release_date?: string;
-  vote_average?: number;
+  vote_average: string;
+  overview: string;
 }

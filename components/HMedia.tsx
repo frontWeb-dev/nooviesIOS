@@ -2,19 +2,21 @@ import React from 'react';
 import styled from 'styled-components/native';
 import Poster from './Poster';
 import Votes from './Votes';
-import { MovieProps } from '../API/api';
+import { HMediaProps } from '../API/api';
 
 const HMovie = styled.View`
-  padding: 0px 30px;
-  margin-bottom: 30px;
+  margin: 0 20px 20px 20px;
+  padding: 10px;
   flex-direction: row;
+  border-radius: 10px;
+  background-color: ${(props) => props.theme.subBgColor};
 `;
 const HColumn = styled.View`
   width: 80%;
   margin-left: 15px;
 `;
 const Title = styled.Text`
-  margin-top: 7px;
+  margin: 7px 0 10px 0;
   font-weight: 600;
   color: ${(props) => props.theme.textColor};
 `;
@@ -31,36 +33,36 @@ const Overview = styled.Text`
   opacity: 0.8;
 `;
 
-const HMedia: React.FC<MovieProps> = ({
-  posterPath,
-  originalTitle,
+const HMedia: React.FC<HMediaProps> = ({
+  poster_path,
+  original_title,
   overview,
-  releaseData,
-  voteAverage,
+  release_data,
+  vote_average,
 }) => {
   return (
     <HMovie>
-      <Poster path={posterPath ? posterPath : ''} />
+      <Poster path={poster_path} />
       <HColumn>
         <Title>
-          {originalTitle !== '' && originalTitle.length > 30
-            ? `${originalTitle.slice(0, 30)}...`
-            : originalTitle}
+          {original_title !== '' && original_title.length > 30
+            ? `${original_title.slice(0, 30)}...`
+            : original_title}
         </Title>
-        {releaseData ? (
+        {release_data ? (
           <Release>
-            {new Date(releaseData).toLocaleDateString('ko', {
+            {new Date(release_data).toLocaleDateString('ko', {
               month: 'long',
               day: 'numeric',
               year: 'numeric',
             })}
           </Release>
         ) : null}
-        {voteAverage ? <Votes votes={voteAverage} /> : null}
+        {vote_average ? <Votes votes={vote_average} /> : null}
         <Overview>
           {overview
-            ? overview !== '' && overview.length > 100
-              ? `${overview.slice(0, 100)}...`
+            ? overview !== '' && overview.length > 120
+              ? `${overview.slice(0, 120)}...`
               : overview
             : null}
         </Overview>

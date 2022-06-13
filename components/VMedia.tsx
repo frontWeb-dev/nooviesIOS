@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import Poster from './Poster';
 import Votes from './Votes';
-import { MovieProps } from '../API/api';
+import { VMediaProps } from '../API/api';
 
 const Movie = styled.View`
   margin-right: 20px;
@@ -14,19 +14,19 @@ const Title = styled.Text`
   font-weight: 600;
 `;
 
-const VMedia: React.FC<MovieProps> = ({
-  posterPath,
-  originalTitle,
-  voteAverage,
+const VMedia: React.FC<VMediaProps> = ({
+  poster_path,
+  original_title,
+  vote_average,
 }) => {
   return (
     <Movie>
-      <Poster path={posterPath} />
+      <Poster path={poster_path} />
       <Title>
-        {originalTitle.slice(0, 13)}
-        {originalTitle.length > 13 ? '...' : null}
+        {original_title.slice(0, 11)}
+        {original_title.length > 11 ? '...' : null}
       </Title>
-      <Votes votes={voteAverage} />
+      <Votes votes={vote_average} />
     </Movie>
   );
 };

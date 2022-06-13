@@ -4,7 +4,7 @@ import { View, StyleSheet, useColorScheme } from 'react-native';
 import { BlurView } from 'expo-blur';
 
 import { makeImgPath } from '../API/utills';
-import { SlideProps } from '../API/api';
+import { MoviesProps } from '../API/api';
 import Poster from './Poster';
 
 // style
@@ -39,11 +39,11 @@ const Votes = styled(Overview)`
   font-size: 12px;
 `;
 
-const Slides: React.FC<SlideProps> = ({
-  backdropPath,
-  posterPath,
-  originalTitle,
-  voteAverage,
+const Slides: React.FC<MoviesProps> = ({
+  backdrop_path,
+  poster_path,
+  original_title,
+  vote_average,
   overview,
 }) => {
   const isDark = useColorScheme() === 'dark';
@@ -51,7 +51,7 @@ const Slides: React.FC<SlideProps> = ({
     <View style={{ flex: 1 }}>
       <BgImg
         style={StyleSheet.absoluteFill}
-        source={{ uri: makeImgPath(backdropPath) }}
+        source={{ uri: makeImgPath(backdrop_path) }}
       />
       <BlurView
         tint={isDark ? 'dark' : 'light'}
@@ -59,11 +59,11 @@ const Slides: React.FC<SlideProps> = ({
         style={StyleSheet.absoluteFill}
       >
         <Wrapper>
-          <Poster path={posterPath} />
+          <Poster path={poster_path} />
           <Column>
-            <Title isDark={isDark}>{originalTitle}</Title>
-            {voteAverage > 0 ? (
-              <Votes isDark={isDark}>⭐️ {voteAverage} / 10</Votes>
+            <Title isDark={isDark}>{original_title}</Title>
+            {vote_average ? (
+              <Votes isDark={isDark}>⭐️ {vote_average} / 10</Votes>
             ) : null}
             <Overview isDark={isDark}>{overview.slice(0, 60)}...</Overview>
           </Column>
