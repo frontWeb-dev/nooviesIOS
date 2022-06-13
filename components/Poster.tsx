@@ -11,7 +11,10 @@ const Image = styled.Image`
   border-radius: 5px;
 `;
 
-const Poster: React.FC = ({ path }) => (
+interface posterProps {
+  path: string;
+}
+const Poster: React.FC<posterProps> = ({ path }) => (
   <Image source={{ uri: makeImgPath(path) }} />
 );
 
