@@ -4,8 +4,10 @@ import Poster from './Poster';
 import Votes from './Votes';
 import { HMediaProps } from '../API/api';
 
+const HWrapper = styled.View`
+  padding: 0 20px;
+`;
 const HMovie = styled.View`
-  margin: 0 20px 20px 20px;
   padding: 10px;
   flex-direction: row;
   border-radius: 10px;
@@ -41,33 +43,35 @@ const HMedia: React.FC<HMediaProps> = ({
   vote_average,
 }) => {
   return (
-    <HMovie>
-      <Poster path={poster_path} />
-      <HColumn>
-        <Title>
-          {original_title !== '' && original_title.length > 30
-            ? `${original_title.slice(0, 30)}...`
-            : original_title}
-        </Title>
-        {release_date ? (
-          <Release>
-            {new Date(release_date).toLocaleDateString('ko', {
-              month: 'long',
-              day: 'numeric',
-              year: 'numeric',
-            })}
-          </Release>
-        ) : null}
-        {vote_average ? <Votes votes={vote_average} /> : null}
-        <Overview>
-          {overview
-            ? overview !== '' && overview.length > 100
-              ? `${overview.slice(0, 100)}...`
-              : overview
-            : null}
-        </Overview>
-      </HColumn>
-    </HMovie>
+    <HWrapper>
+      <HMovie>
+        <Poster path={poster_path} />
+        <HColumn>
+          <Title>
+            {original_title !== '' && original_title.length > 30
+              ? `${original_title.slice(0, 30)}...`
+              : original_title}
+          </Title>
+          {release_date ? (
+            <Release>
+              {new Date(release_date).toLocaleDateString('ko', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric',
+              })}
+            </Release>
+          ) : null}
+          {vote_average ? <Votes votes={vote_average} /> : null}
+          <Overview>
+            {overview
+              ? overview !== '' && overview.length > 100
+                ? `${overview.slice(0, 100)}...`
+                : overview
+              : null}
+          </Overview>
+        </HColumn>
+      </HMovie>
+    </HWrapper>
   );
 };
 
