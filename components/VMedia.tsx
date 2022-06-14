@@ -5,7 +5,6 @@ import Votes from './Votes';
 import { VMediaProps } from '../API/api';
 
 const Movie = styled.View`
-  margin-right: 20px;
   align-items: center;
 `;
 const Title = styled.Text`

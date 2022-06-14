@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  View,
   ActivityIndicator,
   Dimensions,
   RefreshControl,
@@ -27,12 +28,10 @@ const ListTitle = styled.Text`
   font-weight: 600;
   font-size: 18px;
 `;
-const TrendingScroll = styled.ScrollView`
+const TrendingScroll = styled.FlatList`
+  margin: 0 20px 30px 20px;
   background-color: ${(props) => props.theme.subBgColor};
   border-radius: 10px;
-`;
-const ListContainer = styled.View`
-  margin: 0 20px 40px 20px;
 `;
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -121,22 +120,24 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
         ))}
       </Swiper>
       <ListTitle>Trending Movies</ListTitle>
-      <ListContainer>
-        <TrendingScroll
-          contentContainerStyle={{ padding: 10 }}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-        >
-          {trending.map((movie: VMediaProps) => (
-            <VMedia
-              key={movie.id ? movie.id : ''}
-              poster_path={movie.poster_path ? movie.poster_path : ''}
-              original_title={movie.original_title}
-              vote_average={movie.vote_average}
-            />
-          ))}
-        </TrendingScroll>
-      </ListContainer>
+      <TrendingScroll
+        data={trending}
+        horizontal
+        keyExtractor={(item) => item.id + ''}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ padding: 10 }}
+        ItemSeparatorComponent={() => {
+          return <View style={{ width: 20 }} />;
+        }}
+        renderItem={({ item }) => (
+          <VMedia
+            poster_path={item.poster_path ? item.poster_path : ''}
+            original_title={item.original_title}
+            vote_average={item.vote_average}
+          />
+        )}
+      />
+
       <ListTitle>Coming Soon</ListTitle>
       {upcoming.map((movie: HMediaProps) => (
         <HMedia
