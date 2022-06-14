@@ -72,6 +72,7 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
     ).json();
     setUpcoming(results);
   };
+  console.log(upcoming);
   const getTrending = async () => {
     const { results } = await (
       await fetch(
@@ -128,7 +129,7 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
         >
           {trending.map((movie: VMediaProps) => (
             <VMedia
-              key={movie.id}
+              key={movie.id ? movie.id : ''}
               poster_path={movie.poster_path ? movie.poster_path : ''}
               original_title={movie.original_title}
               vote_average={movie.vote_average}
@@ -139,11 +140,11 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
       <ListTitle>Coming Soon</ListTitle>
       {upcoming.map((movie: HMediaProps) => (
         <HMedia
-          key={movie.id}
+          key={movie.id ? movie.id : ''}
           poster_path={movie.poster_path}
           original_title={movie.original_title}
           overview={movie.overview}
-          release_data={movie.release_data}
+          release_date={movie.release_date}
         />
       ))}
     </Container>

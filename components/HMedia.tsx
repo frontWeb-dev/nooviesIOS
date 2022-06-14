@@ -21,7 +21,7 @@ const Title = styled.Text`
   color: ${(props) => props.theme.textColor};
 `;
 const Release = styled.Text`
-  margin: 10px 0;
+  margin-bottom: 10px;
   font-size: 12px;
   font-weight: 500;
   color: ${(props) => props.theme.textColor};
@@ -37,7 +37,7 @@ const HMedia: React.FC<HMediaProps> = ({
   poster_path,
   original_title,
   overview,
-  release_data,
+  release_date,
   vote_average,
 }) => {
   return (
@@ -49,9 +49,9 @@ const HMedia: React.FC<HMediaProps> = ({
             ? `${original_title.slice(0, 30)}...`
             : original_title}
         </Title>
-        {release_data ? (
+        {release_date ? (
           <Release>
-            {new Date(release_data).toLocaleDateString('ko', {
+            {new Date(release_date).toLocaleDateString('ko', {
               month: 'long',
               day: 'numeric',
               year: 'numeric',
@@ -61,8 +61,8 @@ const HMedia: React.FC<HMediaProps> = ({
         {vote_average ? <Votes votes={vote_average} /> : null}
         <Overview>
           {overview
-            ? overview !== '' && overview.length > 120
-              ? `${overview.slice(0, 120)}...`
+            ? overview !== '' && overview.length > 100
+              ? `${overview.slice(0, 100)}...`
               : overview
             : null}
         </Overview>

@@ -24,7 +24,6 @@ const Column = styled.View`
   margin-left: 20px;
 `;
 const Title = styled.Text<{ isDark: boolean }>`
-  padding: 5px;
   font-size: 16px;
   font-weight: 600;
   color: ${(props) => props.theme.textColor};

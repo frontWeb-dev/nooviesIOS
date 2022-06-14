@@ -5,7 +5,7 @@ export interface HMediaProps {
   original_title: string;
   overview: string;
   vote_average?: number;
-  release_data?: string;
+  release_date?: string;
 }
 
 export interface VMediaProps {
