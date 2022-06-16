@@ -10,7 +10,7 @@ import Slides from '../components/Slides';
 import HMedia from '../components/HMedia';
 import VMedia from '../components/VMedia';
 import { MoviesProps } from '../API/api';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 
 // style
 const Container = styled.FlatList``;
@@ -36,30 +36,34 @@ const VSeperator = styled.View`
 const HSeperator = styled.View`
   height: 20px;
 `;
-const movieKeyExtractor = (item) => item.id + '';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 // =  const SCREEN_HEIGHT = Dimemsions.get("window").height;
 
-const API_KEY = '12a42d16c5bda3e29282e2c1b95326af';
-
 const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
-  const [refreshing, setRefreshing] = useState(false);
+  const queryClient = useQueryClient();
+  const {
+    isLoading: nowPlayingLoading,
+    data: nowPlayingData,
+    refetch: refetchNowPlaying,
+    isRefetching: isRefetchingNowPlaying,
+  } = useQuery(['movies', 'nowPlaying'], moviesAPI.getNowPlaying);
+  const {
+    isLoading: upcomingLoading,
+    data: upcomingData,
+    refetch: refetchUpcoming,
+    isRefetching: isRefetchingUpcoming,
+  } = useQuery(['movies', 'upcoming'], moviesAPI.getUpcoming);
+  const {
+    isLoading: trendingLoading,
+    data: trendingData,
+    refetch: refetchTrending,
+    isRefetching: isRefetchingTrending,
+  } = useQuery(['movies', 'trending'], moviesAPI.getTrending);
 
-  const { isLoading: nowPlayingLoading, data: nowPlayingData } = useQuery(
-    'nowPlaying',
-    moviesAPI.getNowPlaying
-  );
-  const { isLoading: upcomingLoading, data: upcomingData } = useQuery(
-    'upcoming',
-    moviesAPI.getUpcoming
-  );
-  const { isLoading: trendingLoading, data: trendingData } = useQuery(
-    'trending',
-    moviesAPI.getTrending
-  );
-
-  const onRefresh = async () => {};
+  const onRefresh = async () => {
+    queryClient.refetchQueries(['movies']);
+  };
   const renderVMedia = ({ item }) => (
     <VMedia
       poster_path={item.poster_path ? item.poster_path : ''}
@@ -75,7 +79,12 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
       release_date={item.release_date}
     />
   );
+
+  const movieKeyExtractor = (item) => item.id + '';
   const loading = nowPlayingLoading || upcomingLoading || trendingLoading;
+  const refreshing =
+    isRefetchingNowPlaying || isRefetchingUpcoming || isRefetchingUpcoming;
+
   return loading ? (
     <Loader>
       <ActivityIndicator size='large' />
