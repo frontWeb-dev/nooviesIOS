@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useColorScheme } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { ThemeProvider } from 'styled-components/native';
+import { QueryClient, QueryClientProvider } from 'react-query';
 // expo
 import AppLoading from 'expo-app-loading';
 import Asset from 'expo-asset';
@@ -10,6 +11,8 @@ import { Ionicons } from '@expo/vector-icons';
 
 import Root from './navigation/Root';
 import { darkTheme, lightTheme } from './style';
+
+const queryClient = new QueryClient();
 
 const loadFonts = (fonts) => fonts.map((font) => Font.loadAsync(font));
 const loadImages = (images) =>
@@ -40,11 +43,13 @@ export default function App() {
     );
   }
   return (
-    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-      <NavigationContainer>
-        <Root />
-      </NavigationContainer>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+        <NavigationContainer>
+          <Root />
+        </NavigationContainer>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 
