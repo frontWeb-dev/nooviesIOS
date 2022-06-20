@@ -43,13 +43,14 @@ const HMedia: React.FC<HMediaProps> = ({
   overview,
   release_date,
   vote_average,
+  fullData,
 }) => {
   const navigation = useNavigation();
   const goToDetail = () => {
     navigation.navigate('Stack', {
       screen: 'Detail',
       params: {
-        original_title,
+        ...fullData,
       },
     });
   };

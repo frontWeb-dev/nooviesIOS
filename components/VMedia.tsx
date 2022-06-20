@@ -6,7 +6,7 @@ import { VMediaProps } from '../API/api';
 import { useNavigation } from '@react-navigation/core';
 import { TouchableOpacity } from 'react-native';
 
-const Movie = styled.View`
+const Container = styled.View`
   align-items: center;
 `;
 const Title = styled.Text`
@@ -19,26 +19,27 @@ const VMedia: React.FC<VMediaProps> = ({
   poster_path,
   original_title,
   vote_average,
+  fullData,
 }) => {
   const navigation = useNavigation();
   const goToDetail = () => {
     navigation.navigate('Stack', {
       screen: 'Detail',
       params: {
-        original_title,
+        ...fullData,
       },
     });
   };
   return (
     <TouchableOpacity onPress={goToDetail}>
-      <Movie>
+      <Container>
         <Poster path={poster_path} />
         <Title>
           {original_title.slice(0, 11)}
           {original_title.length > 11 ? '...' : null}
         </Title>
         <Votes votes={vote_average} />
-      </Movie>
+      </Container>
     </TouchableOpacity>
   );
 };

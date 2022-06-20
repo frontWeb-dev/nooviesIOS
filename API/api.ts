@@ -15,6 +15,12 @@ export const moviesAPI = {
     fetch(
       `${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=ko&region=KR`
     ).then((response) => response.json()),
+  search: ({ queryKey }) => {
+    const [_, query] = queryKey;
+    return fetch(
+      `${BASE_URL}/search/movie?api_key=${API_KEY}&language=ko&region=KR&query=${query}`
+    ).then((response) => response.json());
+  },
 };
 
 export const tvAPI = {
@@ -30,6 +36,12 @@ export const tvAPI = {
     fetch(`${BASE_URL}/tv/top_rated?api_key=${API_KEY}`).then((response) =>
       response.json()
     ),
+  search: ({ queryKey }) => {
+    const [_, query] = queryKey;
+    return fetch(
+      `${BASE_URL}/search/tv?api_key=${API_KEY}&language=ko&region=KR&query=${query}`
+    ).then((response) => response.json());
+  },
 };
 
 // interface
@@ -39,6 +51,14 @@ interface BaseResponse {
   total_pages: number;
 }
 
+export interface SliderProps {
+  backdrop_path: string | null;
+  poster_path: string | null;
+  original_title: string;
+  vote_average: number;
+  overview: string;
+  fullData: Movie;
+}
 export interface Movie {
   adult: boolean;
   backdrop_path: string | null;
@@ -65,10 +85,29 @@ export interface HMediaProps {
   overview: string;
   vote_average?: number;
   release_date?: string;
+  fullData: Movie;
 }
 
 export interface VMediaProps {
   poster_path: string;
   original_title: string;
   vote_average: number;
+  fullData: Movie | TV;
+}
+
+export interface TV {
+  name: string;
+  original_name: string;
+  original_country: string[];
+  vote_count: number;
+  background_path: string | null;
+  vote_average: number;
+  genres_ids: number[];
+  id: number;
+  original_language: string;
+  overview: string;
+  poster_path: string | null;
+  first_air_date: string;
+  popularity: number;
+  media_type: string;
 }
