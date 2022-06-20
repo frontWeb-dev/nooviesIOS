@@ -2,22 +2,35 @@ const API_KEY = '12a42d16c5bda3e29282e2c1b95326af';
 const BASE_URL = 'https://api.themoviedb.org/3';
 
 // fetcher
-const getTrending = () =>
-  fetch(`${BASE_URL}/trending/movie/week?api_key=${API_KEY}`).then((response) =>
-    response.json()
-  );
+export const moviesAPI = {
+  getTrending: () =>
+    fetch(`${BASE_URL}/trending/movie/week?api_key=${API_KEY}`).then(
+      (response) => response.json()
+    ),
+  getUpcoming: () =>
+    fetch(
+      `${BASE_URL}/movie/upcoming?api_key=${API_KEY}&language=ko&region=KR`
+    ).then((response) => response.json()),
+  getNowPlaying: () =>
+    fetch(
+      `${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=ko&region=KR`
+    ).then((response) => response.json()),
+};
 
-const getUpcoming = () =>
-  fetch(
-    `${BASE_URL}/movie/upcoming?api_key=${API_KEY}&language=ko&region=KR`
-  ).then((response) => response.json());
-
-const getNowPlaying = () =>
-  fetch(
-    `${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=ko&region=KR`
-  ).then((response) => response.json());
-
-export const moviesAPI = { getTrending, getUpcoming, getNowPlaying };
+export const tvAPI = {
+  getTrending: () =>
+    fetch(`${BASE_URL}/trending/tv/week?api_key=${API_KEY}`).then((response) =>
+      response.json()
+    ),
+  getAiringToday: () =>
+    fetch(`${BASE_URL}/tv/airing_today?api_key=${API_KEY}`).then((response) =>
+      response.json()
+    ),
+  getTopRated: () =>
+    fetch(`${BASE_URL}/tv/top_rated?api_key=${API_KEY}`).then((response) =>
+      response.json()
+    ),
+};
 
 // interface
 interface BaseResponse {

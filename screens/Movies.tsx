@@ -2,21 +2,16 @@ import React from 'react';
 import { ActivityIndicator, Dimensions, FlatList } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import styled from 'styled-components/native';
+import Swiper from 'react-native-swiper';
+import { useQuery, useQueryClient } from 'react-query';
 
 import { moviesAPI, MovieResponse } from '../API/api';
-
-import Swiper from 'react-native-swiper';
 import Slides from '../components/Slides';
 import HMedia from '../components/HMedia';
 import VMedia from '../components/VMedia';
-import { useQuery, useQueryClient } from 'react-query';
+import Loader from '../components/Loader';
 
 // style
-const Loader = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
 const ListTitle = styled.Text`
   margin: 0 0 20px 30px;
   color: ${(props) => props.theme.textColor};
@@ -28,6 +23,7 @@ const TrendingScroll = styled.FlatList`
   background-color: ${(props) => props.theme.subBgColor};
   border-radius: 10px;
 ` as unknown as typeof FlatList;
+
 const VSeperator = styled.View`
   width: 20px;
 `;
@@ -71,9 +67,7 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
     isRefetchingNowPlaying || isRefetchingUpcoming || isRefetchingUpcoming;
 
   return loading ? (
-    <Loader>
-      <ActivityIndicator size='large' />
-    </Loader>
+    <Loader />
   ) : upcomingData ? (
     <FlatList
       onRefresh={onRefresh}
