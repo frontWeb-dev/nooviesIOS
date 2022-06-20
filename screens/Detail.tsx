@@ -2,11 +2,12 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect } from 'react';
 import { Dimensions, StyleSheet } from 'react-native';
 import styled from 'styled-components/native';
-import { Movie, TV } from '../API/api';
+import { Movie, moviesAPI, TV, tvAPI } from '../API/api';
 import { makeImgPath } from '../API/utills';
 import Poster from '../components/Poster';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BLACK } from '../color';
+import { useQuery } from 'react-query';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -20,16 +21,22 @@ const Header = styled.View`
 `;
 const Background = styled.Image``;
 const Column = styled.View`
-  width: 80%;
   flex-direction: row;
+`;
+const Row = styled.View`
+  width: 80%;
+  margin-left: 15px;
+  align-self: flex-end;
 `;
 const Title = styled.Text`
   width: 80%;
-  margin-left: 15px;
+  margin-bottom: 10px;
   color: ${(props) => props.theme.textColor};
   font-size: 30px;
   font-weight: 600;
-  align-self: flex-end;
+`;
+const Release = styled.Text`
+  color: ${(props) => props.theme.textColor};
 `;
 const OverView = styled.Text`
   margin-top: 20px;
@@ -49,9 +56,24 @@ const Detail: React.FC<DetailScreenProps> = ({
   navigation: { setOptions },
   route: { params },
 }) => {
+  const { isLoading: moviesLoading, data: moviesData } = useQuery(
+    ['movies', params.id],
+    moviesAPI.detail,
+    {
+      enabled: 'orginal_title' in params,
+    }
+  );
+  const { isLoading: tvLoading, data: tvData } = useQuery(
+    ['tv', params.id],
+    tvAPI.detail,
+    {
+      enabled: 'original_name' in params,
+    }
+  );
+
   useEffect(() => {
     setOptions({
-      title: 'original_title' in params ? 'Movie' : 'TV',
+      title: 'original_title' in params ? 'Movie' : 'TV Show',
     });
   }, []);
   return (
@@ -62,12 +84,19 @@ const Detail: React.FC<DetailScreenProps> = ({
           source={{ uri: makeImgPath(params.backdrop_path || '') }}
         />
         <LinearGradient
-          colors={['rgba(0,0,0,0.3)', BLACK]}
+          colors={['rgba(0,0,0,0.4)', BLACK]}
           style={StyleSheet.absoluteFill}
         />
         <Column>
           <Poster path={params.poster_path || ''} />
-          <Title>{'title' in params ? params.title : params.name}</Title>
+          <Row>
+            <Title>{'title' in params ? params.title : params.name}</Title>
+            <Release>
+              {'release_date' in params
+                ? params.release_date
+                : params.first_air_date}
+            </Release>
+          </Row>
         </Column>
       </Header>
       <OverView>{params.overview}</OverView>
