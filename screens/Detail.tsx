@@ -1,16 +1,18 @@
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect } from 'react';
-import { Dimensions, StyleSheet } from 'react-native';
-import styled from 'styled-components/native';
-import { Movie, moviesAPI, TV, tvAPI } from '../API/api';
-import { makeImgPath } from '../API/utills';
-import Poster from '../components/Poster';
-import { LinearGradient } from 'expo-linear-gradient';
-import { BLACK } from '../color';
 import { useQuery } from 'react-query';
-import Loader from '../components/Loader';
+import { Dimensions, StyleSheet } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import styled from 'styled-components/native';
+// expo
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
+// files
+import Poster from '../components/Poster';
+import Loader from '../components/Loader';
+import { Movie, moviesAPI, TV, tvAPI } from '../API/api';
+import { makeImgPath, makeVideoPath } from '../API/utills';
+import { BLACK } from '../color';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -39,6 +41,11 @@ const Title = styled.Text`
   font-weight: 600;
 `;
 const Release = styled.Text`
+  margin-bottom: 10px;
+  color: ${(props) => props.theme.textColor};
+`;
+const Genre = styled.Text`
+  margin-right: 10px;
   color: ${(props) => props.theme.textColor};
 `;
 const Data = styled.View`
@@ -108,13 +115,19 @@ const Detail: React.FC<DetailScreenProps> = ({
                 ? params.release_date
                 : params.first_air_date}
             </Release>
+            <Column>
+              {data?.genres?.map((genre) => (
+                <Genre>{genre.name}</Genre>
+              ))}
+            </Column>
           </Row>
         </Column>
       </Header>
       <Data>
         <OverView>{params.overview}</OverView>
         {isLoading ? <Loader /> : null}
-        {data?.videos?.results?.map((video) => (
+
+        {data?.videos?.results?.slice(1, 3).map((video) => (
           <VideoBtn key={video.key} onPress={() => openYTLink(video.key)}>
             <Ionicons name='logo-youtube' color='red' size={24} />
             <BtnText>{video.name}</BtnText>
