@@ -10,6 +10,7 @@ import Slides from '../components/Slides';
 import HMedia from '../components/HMedia';
 import VMedia from '../components/VMedia';
 import Loader from '../components/Loader';
+import HList from '../components/HList';
 
 // style
 const ListTitle = styled.Text`
@@ -97,23 +98,8 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
               />
             ))}
           </Swiper>
-          <ListTitle>Trending Movies</ListTitle>
           {trendingData ? (
-            <TrendingScroll
-              data={trendingData.results}
-              horizontal
-              keyExtractor={(item) => item.id + ''}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ padding: 10 }}
-              ItemSeparatorComponent={VSeperator}
-              renderItem={({ item }) => (
-                <VMedia
-                  poster_path={item.poster_path || ''}
-                  original_title={item.original_title}
-                  vote_average={item.vote_average}
-                />
-              )}
-            />
+            <HList title='Trending Movies' data={trendingData?.results} />
           ) : null}
           <ListTitle>Coming Soon</ListTitle>
         </>
