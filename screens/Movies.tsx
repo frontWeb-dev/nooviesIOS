@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ActivityIndicator, Dimensions, FlatList } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import styled from 'styled-components/native';
@@ -37,35 +37,22 @@ const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
   const queryClient = useQueryClient();
-  const {
-    isLoading: nowPlayingLoading,
-    data: nowPlayingData,
-    refetch: refetchNowPlaying,
-    isRefetching: isRefetchingNowPlaying,
-  } = useQuery<MovieResponse>(
-    ['movies', 'nowPlaying'],
-    moviesAPI.getNowPlaying
-  );
-  const {
-    isLoading: upcomingLoading,
-    data: upcomingData,
-    refetch: refetchUpcoming,
-    isRefetching: isRefetchingUpcoming,
-  } = useQuery<MovieResponse>(['movies', 'upcoming'], moviesAPI.getUpcoming);
-  const {
-    isLoading: trendingLoading,
-    data: trendingData,
-    refetch: refetchTrending,
-    isRefetching: isRefetchingTrending,
-  } = useQuery<MovieResponse>(['movies', 'trending'], moviesAPI.getTrending);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const { isLoading: nowPlayingLoading, data: nowPlayingData } =
+    useQuery<MovieResponse>(['movies', 'nowPlaying'], moviesAPI.getNowPlaying);
+  const { isLoading: upcomingLoading, data: upcomingData } =
+    useQuery<MovieResponse>(['movies', 'upcoming'], moviesAPI.getUpcoming);
+  const { isLoading: trendingLoading, data: trendingData } =
+    useQuery<MovieResponse>(['movies', 'trending'], moviesAPI.getTrending);
 
   const onRefresh = async () => {
-    queryClient.refetchQueries(['movies']);
+    setRefreshing(true);
+    await queryClient.refetchQueries(['movies']);
+    setRefreshing(false);
   };
 
   const loading = nowPlayingLoading || upcomingLoading || trendingLoading;
-  const refreshing =
-    isRefetchingNowPlaying || isRefetchingUpcoming || isRefetchingUpcoming;
 
   return loading ? (
     <Loader />
