@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { View, Text } from 'react-native';
+import { View, Text, Alert } from 'react-native';
+import { useQuery } from 'react-query';
+import { moviesAPI, tvAPI } from '../API/api';
 
 const Container = styled.ScrollView``;
 
 const SearchBar = styled.TextInput`
   width: 90%;
-  margin: 10px auto;
+  margin: 20px auto;
   padding: 10px 15px;
   color: ${(props) => props.theme.textColor}
   background-color: ${(props) => props.theme.InputColor};
@@ -14,8 +16,29 @@ const SearchBar = styled.TextInput`
 `;
 const Search = () => {
   const [query, setQuery] = useState('');
+  const {
+    isLoading: moviesLoading,
+    data: moviesData,
+    refetch: searchMovies,
+  } = useQuery(['searchMovies', query], moviesAPI.search, {
+    enabled: false, // 바로 동작하지 않게함
+  });
+  const {
+    isLoading: tvLoading,
+    data: tvData,
+    refetch: searchTv,
+  } = useQuery(['searchTv', query], tvAPI.search, {
+    enabled: false, // 바로 동작하지 않게함
+  });
+
   const onChangeText = (text: string) => setQuery(text);
-  console.log(query);
+  const onSubmit = () => {
+    if (query === '') {
+      return;
+    }
+    searchMovies();
+    searchTv();
+  };
   return (
     <Container>
       <SearchBar
@@ -23,6 +46,7 @@ const Search = () => {
         placeholderTextColor='grey'
         returnKeyType='search'
         onChangeText={onChangeText}
+        onSubmitEditing={onSubmit}
       />
     </Container>
   );
