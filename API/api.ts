@@ -20,8 +20,33 @@ const getNowPlaying = () =>
 export const moviesAPI = { getTrending, getUpcoming, getNowPlaying };
 
 // interface
+interface BaseResponse {
+  page: number;
+  total_results: number;
+  total_pages: number;
+}
+
+export interface Movie {
+  adult: boolean;
+  backdrop_path: string | null;
+  genre_ids: number[];
+  id: number;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string | null;
+  release_date: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+}
+export interface MovieResponse extends BaseResponse {
+  results: Movie[];
+}
+
 export interface HMediaProps {
-  id?: number;
   poster_path: string;
   original_title: string;
   overview: string;
@@ -30,17 +55,7 @@ export interface HMediaProps {
 }
 
 export interface VMediaProps {
-  id?: number;
   poster_path: string;
   original_title: string;
   vote_average: number;
-}
-
-export interface MoviesProps {
-  id?: number;
-  backdrop_path: string;
-  poster_path: string;
-  original_title: string;
-  vote_average: string;
-  overview: string;
 }
