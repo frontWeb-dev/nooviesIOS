@@ -4,9 +4,9 @@ const BASE_URL = 'https://api.themoviedb.org/3';
 // fetcher
 export const moviesAPI = {
   getTrending: () =>
-    fetch(`${BASE_URL}/trending/movie/week?api_key=${API_KEY}`).then(
-      (response) => response.json()
-    ),
+    fetch(
+      `${BASE_URL}/trending/movie/week?api_key=${API_KEY}&language=ko&region=KR`
+    ).then((response) => response.json()),
   getUpcoming: () =>
     fetch(
       `${BASE_URL}/movie/upcoming?api_key=${API_KEY}&language=ko&region=KR`
@@ -31,16 +31,16 @@ export const moviesAPI = {
 
 export const tvAPI = {
   getTrending: () =>
-    fetch(`${BASE_URL}/trending/tv/week?api_key=${API_KEY}`).then((response) =>
-      response.json()
+    fetch(`${BASE_URL}/trending/tv/week?api_key=${API_KEY}&language=ko`).then(
+      (response) => response.json()
     ),
   getAiringToday: () =>
-    fetch(`${BASE_URL}/tv/airing_today?api_key=${API_KEY}`).then((response) =>
-      response.json()
+    fetch(`${BASE_URL}/tv/airing_today?api_key=${API_KEY}&language=ko`).then(
+      (response) => response.json()
     ),
   getTopRated: () =>
-    fetch(`${BASE_URL}/tv/top_rated?api_key=${API_KEY}`).then((response) =>
-      response.json()
+    fetch(`${BASE_URL}/tv/top_rated?api_key=${API_KEY}&language=ko`).then(
+      (response) => response.json()
     ),
   search: ({ queryKey }: any) => {
     const [_, query] = queryKey;
