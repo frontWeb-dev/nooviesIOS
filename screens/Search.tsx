@@ -3,12 +3,14 @@ import styled from 'styled-components/native';
 import { View, Text, Alert } from 'react-native';
 import { useQuery } from 'react-query';
 import { moviesAPI, tvAPI } from '../API/api';
+import Loader from '../components/Loader';
+import HList from '../components/HList';
 
 const Container = styled.ScrollView``;
 
 const SearchBar = styled.TextInput`
   width: 90%;
-  margin: 20px auto;
+  margin: 20px auto 40px auto;
   padding: 10px 15px;
   color: ${(props) => props.theme.textColor}
   background-color: ${(props) => props.theme.InputColor};
@@ -39,6 +41,7 @@ const Search = () => {
     searchMovies();
     searchTv();
   };
+
   return (
     <Container>
       <SearchBar
@@ -48,6 +51,11 @@ const Search = () => {
         onChangeText={onChangeText}
         onSubmitEditing={onSubmit}
       />
+      {moviesLoading || tvLoading ? <Loader /> : null}
+      {moviesData ? (
+        <HList title='Movies Results' data={moviesData.results} />
+      ) : null}
+      {tvData ? <HList title='TV Results' data={tvData.results} /> : null}
     </Container>
   );
 };
