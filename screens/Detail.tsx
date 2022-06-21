@@ -1,6 +1,14 @@
 import React, { useEffect } from 'react';
 import { useQuery } from 'react-query';
-import { Dimensions, StyleSheet } from 'react-native';
+import {
+  Dimensions,
+  StyleSheet,
+  TouchableOpacity,
+  Share,
+  useColorScheme,
+  Platform,
+} from 'react-native';
+import Video from 'react-native-video';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import styled from 'styled-components/native';
 // expo
@@ -35,22 +43,22 @@ const Row = styled.View`
 `;
 const Title = styled.Text`
   width: 80%;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   color: ${(props) => props.theme.textColor};
   font-size: 30px;
   font-weight: 600;
 `;
 const Release = styled.Text`
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   color: ${(props) => props.theme.textColor};
 `;
 const Genre = styled.Text`
-  margin-right: 10px;
+  margin: 0 10px 10px 0;
   color: ${(props) => props.theme.textColor};
 `;
 const Data = styled.View`
   padding: 0 20px;
-  margin-top: 20px;
+  margin: 10px 0;
 `;
 const OverView = styled.Text`
   margin: 20px 0;
@@ -58,6 +66,7 @@ const OverView = styled.Text`
   color: ${(prosp) => prosp.theme.textColor};
 `;
 const VideoBtn = styled.TouchableOpacity`
+  width: 90%;
   flex-direction: row;
 `;
 const BtnText = styled.Text`
@@ -83,18 +92,51 @@ const Detail: React.FC<DetailScreenProps> = ({
     isMovie ? moviesAPI.detail : tvAPI.detail
   );
 
+  const shareMedia = async () => {
+    const isAndroid = Platform.OS === 'android';
+    const homepage = isMovie
+      ? `https://www.imdb.com/title/${data.imdb_id}/`
+      : data.homepage;
+    if (isAndroid) {
+      await Share.share({
+        message: `${params.overview}\n Check it out: ${homepage}`,
+      });
+    } else {
+      await Share.share({
+        url: homepage,
+      });
+    }
+  };
+  const ShareButton = () => (
+    <TouchableOpacity onPress={shareMedia}>
+      <Ionicons
+        name='share-outline'
+        color={isDark ? '#fff' : '#000'}
+        size={24}
+      />
+    </TouchableOpacity>
+  );
+
   useEffect(() => {
     setOptions({
       title: 'original_title' in params ? 'Movie' : 'TV Show',
     });
   }, []);
 
+  useEffect(() => {
+    if (data) {
+      setOptions({
+        headerRight: () => <ShareButton />,
+      });
+    }
+  }, [data]);
+
   const openYTLink = async (videoId: string) => {
     const baseUrl = `http://m.youtube.com/watch?v=${videoId}`;
     await WebBrowser.openBrowserAsync(baseUrl);
     // await Linking.openURL(baseUrl);
   };
-
+  const isDark = useColorScheme() === 'dark';
   return (
     <Container>
       <Header>
@@ -103,7 +145,11 @@ const Detail: React.FC<DetailScreenProps> = ({
           source={{ uri: makeImgPath(params.backdrop_path || '') }}
         />
         <LinearGradient
-          colors={['rgba(0,0,0,0.4)', BLACK]}
+          colors={
+            isDark
+              ? ['rgba(0,0,0,0.4)', BLACK]
+              : ['rgba(255,255,255,0.4)', 'whitesmoke']
+          }
           style={StyleSheet.absoluteFill}
         />
         <Column>
@@ -127,7 +173,7 @@ const Detail: React.FC<DetailScreenProps> = ({
         <OverView>{params.overview}</OverView>
         {isLoading ? <Loader /> : null}
 
-        {data?.videos?.results?.slice(1, 3).map((video) => (
+        {data?.videos?.results?.slice(0, 3).map((video) => (
           <VideoBtn key={video.key} onPress={() => openYTLink(video.key)}>
             <Ionicons name='logo-youtube' color='red' size={24} />
             <BtnText>{video.name}</BtnText>

@@ -33,7 +33,7 @@ target 'nooviesIOS' do
   #   use_flipper!()
   # end
 
-  pod 'react-native-video', :path => '../node_modules/react-native-video'
+  pod 'react-native-video', :path => '../node_modules/react-native-video/react-native-video.podspec'
 
   post_install do |installer|
     react_native_post_install(installer)
