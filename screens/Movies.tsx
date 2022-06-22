@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, Dimensions, FlatList } from 'react-native';
+import { ActivityIndicator, Alert, Dimensions, FlatList } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import styled from 'styled-components/native';
 import Swiper from 'react-native-swiper';
-import { useQuery, useQueryClient } from 'react-query';
+import { useInfiniteQuery, useQuery, useQueryClient } from 'react-query';
 
 import { moviesAPI, MovieResponse } from '../API/api';
 import Slides from '../components/Slides';
@@ -42,7 +42,10 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
   const { isLoading: nowPlayingLoading, data: nowPlayingData } =
     useQuery<MovieResponse>(['movies', 'nowPlaying'], moviesAPI.getNowPlaying);
   const { isLoading: upcomingLoading, data: upcomingData } =
-    useQuery<MovieResponse>(['movies', 'upcoming'], moviesAPI.getUpcoming);
+    useInfiniteQuery<MovieResponse>(
+      ['movies', 'upcoming'],
+      moviesAPI.getUpcoming
+    );
   const { isLoading: trendingLoading, data: trendingData } =
     useQuery<MovieResponse>(['movies', 'trending'], moviesAPI.getTrending);
 
@@ -53,13 +56,17 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
   };
 
   const loading = nowPlayingLoading || upcomingLoading || trendingLoading;
-
+  const loadMore = () => {
+    alert('load more');
+  };
   return loading ? (
     <Loader />
   ) : upcomingData ? (
     <FlatList
       onRefresh={onRefresh}
       refreshing={refreshing}
+      onEndReached={loadMore}
+      onEndReachedThreshold={0.4}
       ListHeaderComponent={
         <>
           <Swiper
@@ -92,7 +99,7 @@ const Movies: React.FC<NativeStackScreenProps<any, 'Movies'>> = () => {
           <ListTitle>Coming Soon</ListTitle>
         </>
       }
-      data={upcomingData.results}
+      data={upcomingData.pages.map((page) => page.results).flat()}
       keyExtractor={(item) => item.id + ''}
       ItemSeparatorComponent={HSeperator}
       renderItem={({ item }) => (
