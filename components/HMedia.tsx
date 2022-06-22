@@ -20,6 +20,7 @@ const HColumn = styled.View`
   margin-left: 15px;
 `;
 const Title = styled.Text`
+  width: 90%;
   margin: 7px 0 10px 0;
   font-weight: 600;
   color: ${(props) => props.theme.textColor};
@@ -77,8 +78,8 @@ const HMedia: React.FC<HMediaProps> = ({
             {vote_average ? <Votes votes={vote_average} /> : null}
             <Overview>
               {overview
-                ? overview !== '' && overview.length > 100
-                  ? `${overview.slice(0, 100)}...`
+                ? overview !== '' && overview.length > 80
+                  ? `${overview.slice(0, 80)}...`
                   : overview
                 : null}
             </Overview>

@@ -3,6 +3,7 @@ import { FlatList } from 'react-native';
 import styled from 'styled-components/native';
 import VMedia from './VMedia';
 import { Movie, TV } from '../API/api';
+import { loadMore } from '../API/utills';
 
 const ListContainer = styled.View`
   margin-bottom: 40px;
@@ -18,30 +19,42 @@ const HListSeperator = styled.View`
 `;
 interface HListProps {
   title: string;
-  data: Movie[] | TV[];
+  data: any[];
+  hasNextPage?: boolean | undefined;
+  fetchNextPage?: any;
 }
-const HList: React.FC<HListProps> = ({ title, data }) => (
-  <ListContainer>
-    <ListTitle>{title}</ListTitle>
-    <FlatList
-      data={data}
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ paddingHorizontal: 20 }}
-      ItemSeparatorComponent={HListSeperator}
-      keyExtractor={(item: Movie | TV) => item.id + ''}
-      renderItem={({ item }: { item: Movie | TV }) => (
-        <VMedia
-          poster_path={item.poster_path || ''}
-          original_title={
-            'original_title' in item ? item.original_title : item.original_name
-          }
-          vote_average={item.vote_average}
-          fullData={item}
-        />
-      )}
-    />
-  </ListContainer>
-);
+const HList: React.FC<HListProps> = ({
+  title,
+  data,
+  hasNextPage,
+  fetchNextPage,
+}) => {
+  return (
+    <ListContainer>
+      <ListTitle>{title}</ListTitle>
+      <FlatList
+        data={data}
+        horizontal
+        onEndReached={() => loadMore(hasNextPage, fetchNextPage)}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ paddingHorizontal: 20 }}
+        ItemSeparatorComponent={HListSeperator}
+        keyExtractor={(item: Movie | TV) => item.id + ''}
+        renderItem={({ item }: { item: Movie | TV }) => (
+          <VMedia
+            poster_path={item.poster_path || ''}
+            original_title={
+              'original_title' in item
+                ? item.original_title
+                : item.original_name
+            }
+            vote_average={item.vote_average}
+            fullData={item}
+          />
+        )}
+      />
+    </ListContainer>
+  );
+};
 
 export default HList;

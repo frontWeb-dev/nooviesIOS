@@ -19,7 +19,7 @@ import * as WebBrowser from 'expo-web-browser';
 import Poster from '../components/Poster';
 import Loader from '../components/Loader';
 import { Movie, moviesAPI, TV, tvAPI } from '../API/api';
-import { makeImgPath, makeVideoPath } from '../API/utills';
+import { makeImgPath } from '../API/utills';
 import { BLACK } from '../color';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -45,7 +45,7 @@ const Title = styled.Text`
   width: 80%;
   margin-bottom: 12px;
   color: ${(props) => props.theme.textColor};
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 600;
 `;
 const Release = styled.Text`
